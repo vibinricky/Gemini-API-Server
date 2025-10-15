@@ -28,11 +28,14 @@ app.post("/api/chat", async (req, res) => {
                 .json({ error: "Unauthorized: Invalid password" });
         }
 
-        const { prompt } = req.body;
+        const { prompt, model } = req.body;
         if (!prompt) return res.status(400).json({ error: "Missing prompt" });
 
+        // Choose model, default to gemini-2.5-flash
+        const chosenModel = model || "gemini-2.5-flash";
+
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: chosenModel,
             contents: prompt,
         });
 
