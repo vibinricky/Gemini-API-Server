@@ -9,8 +9,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-console.log("API Key loaded:", !!process.env.GEMINI_API_KEY);
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// ✅ Root route test (shows API key status)
+app.get("/", (_, res) => {
+    const keyLoaded = !!process.env.GEMINI_API_KEY;
+    res.send(`✅ Gemini API is running!<br>API Key loaded: ${keyLoaded}`);
+});
 
 // POST endpoint
 app.post("/api/chat", async (req, res) => {
@@ -30,11 +35,7 @@ app.post("/api/chat", async (req, res) => {
     }
 });
 
-// Quick test route
-app.get("/", (_, res) => res.send("✅ Gemini API is running!"));
-
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+    console.log(`🚀 Server running at http://localhost:${PORT}`)
+);
